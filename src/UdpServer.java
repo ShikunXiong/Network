@@ -1,5 +1,4 @@
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
@@ -7,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UdpServer {
-    private final int MAX_LENGTH = 1024;
+    private final int MAX_LENGTH = 3;
     private final int LIMIT = 3;
     private byte[] sendbuf = new byte[LIMIT];
-    private final int PORT = 5555;
+    private final int PORT = 1111;
     private String backMess = "";
     private DatagramPacket recPacket;
     private DatagramPacket sendPacket;
@@ -30,10 +29,8 @@ public class UdpServer {
             tools t = new tools();
             // Receive
             while (true) {
-                System.out.println("UDPServer starts\r\n");
                 rec = "";
                 while (true) {
-
                     income = new byte[LIMIT];
                     recPacket = new DatagramPacket(income, income.length);
                     socket.receive(recPacket);
@@ -59,7 +56,7 @@ public class UdpServer {
                     List<File> l = new ArrayList<>();
                     l = listFiles(file);
                     for(File f:l){
-                        backMess += f.getName() + " ";
+                        backMess += f.getName() + "\n";
                     }
                 }else{
                     int end = rec.length();
@@ -72,6 +69,13 @@ public class UdpServer {
                             System.out.println(path);
                             if (new File(path).exists()) {
                                 backMess = "ok\r\n";
+                                FileInputStream inputStream = new FileInputStream(path);
+                                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream,"utf-8"));
+                                String str = null;
+                                while((str = bufferedReader.readLine()) != null)
+                                {
+                                    backMess += str + "\n";
+                                }
                             } else {
                                 backMess = "no found\r\n";
                             }
@@ -88,9 +92,9 @@ public class UdpServer {
             }
 
         }catch (SocketException e){
-            e.printStackTrace();
+
         }catch (IOException ex){
-            ex.printStackTrace();
+
         }
     }
 

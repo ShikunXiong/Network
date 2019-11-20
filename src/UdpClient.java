@@ -6,7 +6,7 @@ public class UdpClient {
     private final int LIMIT = 3;
     private String address = "127.0.0.1";
     private String send;
-    private final int PORT = 5555;
+    private final int PORT = 1111;
     private Scanner scanner;
     private byte[] allBuf = new byte[8192];
     private byte[] sendbuf = new byte[LIMIT];
@@ -43,8 +43,8 @@ public class UdpClient {
                     recBuf = new byte[LIMIT];
                     DatagramPacket recPacket = new DatagramPacket(recBuf, recBuf.length);
                     socket.receive(recPacket);
-                    String current = new String(recPacket.getData()).trim();
-                    if(current.equals("#")){
+                    String current = new String(recPacket.getData());
+                    if(current.contains("#")){
                         break;
                     }
                     else{
@@ -55,11 +55,11 @@ public class UdpClient {
             }
 
         }catch (SocketException e){
-            e.printStackTrace();
+            System.err.println(e);
         }catch (UnknownHostException unknown){
-            unknown.printStackTrace();
+            System.err.println(unknown);
         }catch (IOException ex){
-            ex.printStackTrace();
+            System.err.println(ex);
         }
 
     }

@@ -4,7 +4,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class tools {
-    private final int MAXTIME = 3;
+    private final int MAXTIME = 10;
     public void sendChunk(byte[] allBuf, int size, DatagramSocket socket, InetAddress add,
                           int limit, int port,byte[] sendbuf, DatagramPacket packet){
         int start = 0;
@@ -19,6 +19,7 @@ public class tools {
             try {
                 socket.send(packet);
             }catch (IOException e){
+                System.out.println("send fail");
                 e.printStackTrace();
             }
             start = end;
@@ -62,7 +63,7 @@ public class tools {
                             throw new IOException("Send fail");
                         }
                     } catch (Exception e){
-                        System.err.println("server no response");
+                        //System.err.println("server no response");
                     }
                 } catch (IOException e) {
                     times++;
