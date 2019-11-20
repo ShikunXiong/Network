@@ -4,38 +4,58 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class CountLines {
 
 
     public static void main(String args[]){
+        System.out.println("please input file names:");
+        Scanner scanner = new Scanner(System.in);
         List<String> files = new ArrayList<>();
-        files.add("files/c1.txt");
-        files.add("files/c2.txt");
-        countLines(files);
+        File dir = new File("files/");
+        String[] f = dir.list();
+        String str1 = "";
+        if (scanner.hasNextLine()) {
+            str1 = scanner.nextLine();
+        }
+
+        String [] arr = str1.split("\\s+");
+        for (String x: arr){
+            files.add(x);
+        }
+        countLines(files, arr);
     }
 
-    public static void  countLines(List<String> list){
+    public static void  countLines(List<String> list,  String [] arr){
+        String base_path = "files/";
         String result = "";
-        for (String s:list){
-            int count = 0;
-            try {
-                BufferedReader reader = new BufferedReader(new InputStreamReader
-                        (new FileInputStream(new File(s)),"UTF-8"));
-                String line = "";
-                while((line = reader.readLine())!=null){
-                    count+=1;
+        String no_exist = "";
+        for (String s:list) {
+            boolean flag = false;
+            for (String f : arr) {
+                if (f.equals(s)){
+                    flag = true;
+                    int count = 0;
+                    try {
+                        BufferedReader reader = new BufferedReader(new InputStreamReader
+                                (new FileInputStream(new File(base_path+s)), "UTF-8"));
+                        String line = "";
+                        while ((line = reader.readLine()) != null) {
+                            count += 1;
+                        }
+                        result += s + " " + count + "\n";
+                    } catch (Exception e) {
+                    }
+                break;
                 }
-
-
-            }catch (Exception e){
-                System.err.println("Error Read" + e);
             }
-
-            result += s.substring(6) + " " + count + "\n";
-
+            if(!flag) {
+                no_exist += s + " doesn't exist";
+            }
         }
         System.out.println(result);
+        System.out.println(no_exist);
     }
 }
